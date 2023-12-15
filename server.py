@@ -30,7 +30,7 @@ def handle(client):
     while True:
         try:
             #If the client is connected then 
-            message = client.recv(1024)
+            message = client.recv(1024).decode('utf-8')
             #since the nicknames and clients are on the same index in their respective tuples
             print(f"{nicknames[clients.index(client)]} says {message}")
         except:
@@ -40,9 +40,11 @@ def handle(client):
             clients.remove(client)
             #close the connection from the client
             client.close()
+
             #now remove the nickname
             nickname = nicknames[index]
-            nickname.remove(nickname)
+            print(f"{nickname} has left the chat!")
+            nicknames.remove(nickname)
             break
             
 
@@ -57,7 +59,7 @@ def receive():
         print(f"Connected with{str(address)}")  #address has to be typecasted to string
         #whenever we send something from the server we send it to the client via the socket
         client.send("Nickname: ".encode('utf-8'))
-        nickname = client.recv(1024) #receiving 1024 bytes as a response from the client
+        nickname = client.recv(1024).decode('utf-8') #receiving 1024 bytes as a response from the client
         #need to include the nickname of the client in the  nicknames tuple
         nicknames.append(nickname)
         #Also need to know the socket for the connection
